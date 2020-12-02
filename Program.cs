@@ -8,7 +8,11 @@ namespace DeckOfCards
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Deck deck = new Deck();
+            Player dave = new Player("Dave");
+            dave.Draw(deck);
+            dave.Discard(53);
+            Console.WriteLine(dave);
         }
         class Card
         {
@@ -67,6 +71,35 @@ namespace DeckOfCards
                 var random = new Random();
                 this.Cards = this.Cards.OrderBy(item => random.Next()).ToList();
             }
+        }
+        class Player
+        {
+            public string Name;
+            public Player(string name)
+            {
+                this.Name = name;
+                this.Hand = new List<Card>();
+            }
+            public List<Card> Hand;
+            public Card Discard(int index)
+            {
+                if (index > this.Hand.Count - 1)
+                {
+                    return null;
+                }
+                Card discarded = this.Hand[index];
+                this.Hand.Remove(discarded);
+                return discarded;
+            }
+            public Card Draw(Deck deck)
+            {
+                var random = new Random();
+                Card drawn = deck.Cards[random.Next(0, deck.Cards.Count - 1)];
+                deck.Cards.Remove(drawn);
+                this.Hand.Add(drawn);
+                return drawn;
+            }
+
         }
     }
 }
